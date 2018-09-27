@@ -66,7 +66,6 @@ public class SynthesizerActivity extends AppCompatActivity implements View.OnCli
     private Map<Integer, Integer> noteMap;
 
     private Switch recordSwitch;
-    private boolean isRecording = false;
     List<Integer> recordNotes = new ArrayList<>();
 
     public static final float DEFAULT_VOLUME = 1.0f;
@@ -160,13 +159,11 @@ public class SynthesizerActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    isRecording = true;
                     recordNotes.clear();
-                    Toast.makeText(SynthesizerActivity.this, "Recording OvO b", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SynthesizerActivity.this, "Recording", Toast.LENGTH_SHORT).show();
                 }
                 else if(!isChecked){
-                    isRecording = false;
-                    Toast.makeText(SynthesizerActivity.this, "Stop o.o p", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SynthesizerActivity.this, "Recording stopped", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -342,27 +339,23 @@ public class SynthesizerActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void check(int note) {
-        if(isRecording = false){
+        if(!recordSwitch.isChecked()) {
             playNote(note);
         }
-        else if(isRecording = true){
+        else if(recordSwitch.isChecked()){
             playNote(note);
-            record(note);
+            recordNotes.add(note);
         }
-    }
-
-    private void record(int note) {
-        recordNotes.add(note);
     }
 
     private void playRecording() {
-        if(isRecording = false){
+        if(!recordSwitch.isChecked()){
             for(int notes:recordNotes){
                 playNote(notes);
                 delay(500);
             }
         }
-        else if(isRecording = true){
+        else if(recordSwitch.isChecked()){
             Toast.makeText(this, "Recording is still in progress >:(", Toast.LENGTH_SHORT).show();
         }
     }
