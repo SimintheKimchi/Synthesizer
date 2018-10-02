@@ -4,6 +4,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -159,7 +160,8 @@ public class SynthesizerActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    recordNotes.clear();
+                    //recordNotes.clear();
+                    recordNotes = new ArrayList<>();
                     Toast.makeText(SynthesizerActivity.this, "Recording", Toast.LENGTH_SHORT).show();
                 }
                 else if(!isChecked){
@@ -262,8 +264,11 @@ public class SynthesizerActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
-        if(keyCode == 45){
-            check(noteA);
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_Q:
+                Log.d("PRESS:", "one");
+                check(noteA);
+                return true;
         }
         if(keyCode == 9){
             check(noteBb);
@@ -342,20 +347,22 @@ public class SynthesizerActivity extends AppCompatActivity implements View.OnCli
         if(!recordSwitch.isChecked()) {
             playNote(note);
         }
-        else if(recordSwitch.isChecked()){
+        else {
             playNote(note);
             recordNotes.add(note);
+            Log.d("RECORDING:", recordNotes.toString());
         }
     }
 
     private void playRecording() {
         if(!recordSwitch.isChecked()){
+
             for(int notes:recordNotes){
                 playNote(notes);
                 delay(500);
             }
         }
-        else if(recordSwitch.isChecked()){
+        else {
             Toast.makeText(this, "Recording is still in progress >:(", Toast.LENGTH_SHORT).show();
         }
     }
